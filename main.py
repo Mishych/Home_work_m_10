@@ -27,35 +27,35 @@ class Record:
         self.name = Name(name)
         self.phones = []
 
-    def add_phone(self, phone_number: Phone):
+    def add_phone(self, phone_number):
         phone = phone_number
-        self.phones.append(phone)
+        self.phones.append(Phone(phone))
     
     def printt(self):
         return self.phones
        
     def remove_phone(self, phone):
         for el in self.phones:
-            if el == phone:
-                self.phones.remove(phone)
+            if el.value == phone:
+                self.phones.remove(el)
                 return f"Phone {phone} has been deleted"
         return f"Phone {phone} is not found"
     
     def edit_phone(self, old_phone, new_phone):
         for ind, phone in enumerate(self.phones):          
-            if phone == old_phone:
-                self.phones[ind] = new_phone
+            if phone.value == old_phone:
+                self.phones[ind] = Phone(new_phone)
                 return f"Phone number has been updated for {self.name.value}"
-        return f"{old_phone} is not founded"
+        raise ValueError
     
     def find_phone(self, phone_to_find):
         for phone in self.phones:
-            if phone == phone_to_find:
-                return phone_to_find
-        return f"This phone number {phone_to_find} is not found"
+            if phone.value == phone_to_find:
+                return phone
+        return None
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p for p in self.phones)}"
+        return f"Contact name: {self.name.value}, phones: {'; '.join(self.p for p in self.phones)}"
     
 class AddressBook(UserDict):
     def add_record(self, record: Record):
@@ -64,7 +64,7 @@ class AddressBook(UserDict):
     def find(self, name):
         if name in self.data:
             return self.data[name]
-        return f"This name {name} is not in the record"
+        return None
     
     def delete(self, name):
         if name in self.data:
